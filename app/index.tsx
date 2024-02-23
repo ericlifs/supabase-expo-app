@@ -1,8 +1,10 @@
 import { Stack } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import Button from '~/components/button';
+import TextInput from '~/components/text-input';
 import { supabase } from '~/utils/storage';
 
 function HomeScreen() {
@@ -46,7 +48,7 @@ function HomeScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <View className="flex-1 bg-zinc-900 px-5" style={{ paddingBottom: bottom }}>
+      <View className="flex-1 bg-zinc-900 px-5" style={{ paddingBottom: bottom + 40 }}>
         {isLoading && (
           <View className="absolute top-0 left-0 right-0 bottom-0 items-center justify-center z-10 bg-black/50 gap-3">
             <ActivityIndicator color="#fff" />
@@ -55,31 +57,21 @@ function HomeScreen() {
         )}
 
         <View className="flex-1 w-full justify-center items-center">
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            placeholder="Email"
-            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-800 border-white rounded-md p-2 text-white"
-          />
+          <TextInput value={email} onChangeText={setEmail} placeholder="Email" />
           <TextInput
             value={password}
             onChangeText={setPassword}
-            autoCapitalize="none"
             placeholder="Password"
-            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-800 border-white rounded-md p-2 text-white"
             secureTextEntry
           />
-          <TouchableOpacity
-            onPress={onSignInPress}
-            className="bg-white p-3 rounded-xl w-full items-center mt-4">
-            <Text>Sign In</Text>
-          </TouchableOpacity>
+          <Button onPress={onSignInPress} text="Sign In" className="mt-4" />
         </View>
 
-        <TouchableOpacity onPress={onSignUpPress} className="w-full items-center mb-10">
-          <Text className="text-white">Sign up instead</Text>
-        </TouchableOpacity>
+        <View className="flex items-center justify-center">
+          <TouchableOpacity onPress={onSignUpPress} className="w-full items-center mt-5">
+            <Text className="text-white">Sign up instead</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
