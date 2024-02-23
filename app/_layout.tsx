@@ -1,6 +1,10 @@
-import '../global.css';
+import { Session } from '@supabase/supabase-js';
+import { Slot, useRouter, useSegments } from 'expo-router';
+import { useEffect, useState } from 'react';
 
-import { Stack } from 'expo-router';
+import { supabase } from '~/utils/storage';
+
+import '../global.css';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -8,9 +12,36 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
+  const [session, setSession] = useState<Session | null>(null);
+  const [initialized, setInitialized] = useState(false);
+
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+      setInitialized(true);
+    });
+
+    return () => {
+      data.subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (initialized) {
+      const isAuthPage = segments[0] === '(auth)';
+
+      if (session && !isAuthPage) {
+        router.replace('/(auth)');
+      }
+
+      if (!session && isAuthPage) {
+        router.replace('/');
+      }
+    }
+  }, [initialized, session, segments, router]);
+
+  return <Slot />;
 }
