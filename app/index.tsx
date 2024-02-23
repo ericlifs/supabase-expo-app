@@ -46,7 +46,7 @@ function HomeScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <View className="flex-1 bg-[#151515] px-5" style={{ paddingBottom: bottom }}>
+      <View className="flex-1 bg-zinc-900 px-5" style={{ paddingBottom: bottom }}>
         {isLoading && (
           <View className="absolute top-0 left-0 right-0 bottom-0 items-center justify-center z-10 bg-black/50 gap-3">
             <ActivityIndicator color="#fff" />
@@ -60,19 +60,19 @@ function HomeScreen() {
             onChangeText={setEmail}
             autoCapitalize="none"
             placeholder="Email"
-            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-700 border-lime-700 rounded-md p-2 text-white"
+            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-800 border-white rounded-md p-2 text-white"
           />
           <TextInput
             value={password}
             onChangeText={setPassword}
             autoCapitalize="none"
             placeholder="Password"
-            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-700 border-lime-700 rounded-md p-2 text-white"
+            className="my-1 h-12 border w-full placeholder:text-zinc-400 bg-zinc-800 border-white rounded-md p-2 text-white"
             secureTextEntry
           />
           <TouchableOpacity
             onPress={onSignInPress}
-            className="bg-lime-700 p-3 rounded-xl w-full items-center mt-4">
+            className="bg-white p-3 rounded-xl w-full items-center mt-4">
             <Text>Sign In</Text>
           </TouchableOpacity>
         </View>
