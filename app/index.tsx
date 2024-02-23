@@ -1,7 +1,9 @@
 import { Stack } from 'expo-router';
-import React, { useState } from 'react';
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { supabase } from '~/utils/storage';
 
 function HomeScreen() {
   const [email, setEmail] = useState('');
@@ -10,9 +12,36 @@ function HomeScreen() {
 
   const { bottom } = useSafeAreaInsets();
 
-  const onSignInPress = () => {};
+  const onSignInPress = useCallback(async () => {
+    setIsLoading(true);
 
-  const onSignUpPress = () => {};
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      Alert.alert(error.message);
+    }
+
+    setIsLoading(false);
+  }, [email, password]);
+
+  const onSignUpPress = useCallback(async () => {
+    setIsLoading(true);
+
+    const {
+      error,
+      data: { session },
+    } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+      Alert.alert(error.message);
+    }
+
+    if (!session) {
+      Alert.alert('Check your email for the confirmation link.');
+    }
+
+    setIsLoading(false);
+  }, [email, password]);
 
   return (
     <>
