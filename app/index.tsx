@@ -3,7 +3,9 @@ import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import AppleAuth from '~/components/apple.native';
 import Button from '~/components/button';
+import GoogleAuth from '~/components/google.native';
 import TextInput from '~/components/text-input';
 import { supabase } from '~/utils/storage';
 
@@ -48,7 +50,9 @@ function HomeScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <View className="flex-1 bg-zinc-900 px-5" style={{ paddingBottom: bottom + 40 }}>
+      <View
+        className="flex-1 justify-center items-center bg-zinc-900 px-5"
+        style={{ paddingBottom: bottom + 40 }}>
         {isLoading && (
           <View className="absolute top-0 left-0 right-0 bottom-0 items-center justify-center z-10 bg-black/50 gap-3">
             <ActivityIndicator color="#fff" />
@@ -56,18 +60,29 @@ function HomeScreen() {
           </View>
         )}
 
-        <View className="flex-1 w-full justify-center items-center">
+        <View className="w-full justify-center items-center relative">
           <TextInput value={email} onChangeText={setEmail} placeholder="Email" />
           <TextInput
             value={password}
             onChangeText={setPassword}
             placeholder="Password"
+            className="mt-4"
             secureTextEntry
           />
-          <Button onPress={onSignInPress} text="Sign In" className="mt-4" />
+          <Button
+            onPress={onSignInPress}
+            disabled={!email || !password}
+            text="Sign In"
+            className="mt-4"
+          />
+
+          <View className="absolute -bottom-40">
+            <AppleAuth style={{ width: 200 }} />
+            <GoogleAuth style={{ marginTop: 16, width: 200 }} />
+          </View>
         </View>
 
-        <View className="flex items-center justify-center">
+        <View className="absolute bottom-20 left-0 right-0 flex items-center justify-center">
           <TouchableOpacity onPress={onSignUpPress} className="w-full items-center mt-5">
             <Text className="text-white">Sign up instead</Text>
           </TouchableOpacity>
