@@ -2,11 +2,11 @@
   "name": "supabase-expo-app",
   "version": "1.0.0",
   "scripts": {
-    "android": "expo start --android",
+    "android": "expo start -c --android",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
-    "ios": "expo start --ios",
-    "start": "expo start",
-    "web": "expo start --web"
+    "ios": "expo start -c --ios",
+    "start": "expo start -c",
+    "web": "expo start -c --web"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
