@@ -1,7 +1,7 @@
 import { decode } from 'base64-arraybuffer';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image } from 'react-native';
 
 import Button from '~/components/button';
@@ -9,6 +9,26 @@ import { supabase } from '~/utils/storage';
 
 const Profile = () => {
   const [image, setImage] = useState<string | null>(null);
+
+  const loadUserAvatar = useCallback(async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { data } = await supabase.storage.from('avatars').download(`${user?.id}/avatar.png`);
+
+    if (data) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(data!);
+      fileReader.onload = () => {
+        setImage(fileReader.result as string);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    loadUserAvatar();
+  }, [loadUserAvatar]);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
