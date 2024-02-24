@@ -11,7 +11,8 @@
     },
     "plugins": [
       "expo-router",
-      "@react-native-google-signin/google-signin"
+      ["@react-native-google-signin/google-signin"],
+      ["expo-image-picker", { "photosPermission": "The app access your photos to upload an avatar" }]
     ],
     "experiments": {
       "typedRoutes": true,
