@@ -4,15 +4,10 @@ import { FlatList, View, ListRenderItem, Text } from 'react-native';
 import colors from 'tailwindcss/colors';
 
 import Button from '~/components/button';
+import SwipeableRow from '~/components/swipeable-row';
 import TextInput from '~/components/text-input';
+import { Todo } from '~/types';
 import { supabase } from '~/utils/storage';
-
-interface Todo {
-  id: number;
-  user_id: number;
-  task: string;
-  is_complete: boolean;
-}
 
 const Index = () => {
   const [todo, setTodo] = useState('');
@@ -54,11 +49,37 @@ const Index = () => {
     getAllTodos();
   }, [getAllTodos]);
 
+  const updateTodo = async (todo: Todo) => {
+    const { data } = await supabase
+      .from('todos')
+      .update({ is_complete: !todo.is_complete })
+      .eq('id', todo.id)
+      .select()
+      .single();
+
+    setTodos((prevTodos) =>
+      prevTodos.reduce(
+        (accum, item) => (item.id === data.id ? [...accum, data] : [...accum, item]),
+        [] as Todo[]
+      )
+    );
+  };
+
+  const deleteTodo = async (todo: Todo) => {
+    await supabase.from('todos').delete().eq('id', todo.id);
+
+    setTodos((prevTodos) => prevTodos.filter((item) => item.id !== todo.id));
+  };
+
   const renderTodo: ListRenderItem<Todo> = ({ item }) => (
-    <View className="flex-row p-5 items-center">
-      <Text className="flex-1 mr-4">{item.task}</Text>
-      {item.is_complete && <Ionicons name="checkmark" color={colors.lime[800]} size={30} />}
-    </View>
+    <SwipeableRow todo={item} onToggle={() => updateTodo(item)} onDelete={() => deleteTodo(item)}>
+      <View className="flex-row p-5 items-center">
+        <Text className="flex-1 mr-4">{item.task}</Text>
+        {item.is_complete && (
+          <Ionicons name="checkmark-circle-outline" color={colors.lime[800]} size={24} />
+        )}
+      </View>
+    </SwipeableRow>
   );
 
   return (
