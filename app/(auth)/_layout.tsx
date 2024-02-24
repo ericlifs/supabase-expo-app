@@ -12,12 +12,12 @@ const Layout = () => {
       screenOptions={{
         headerShadowVisible: false,
         headerStyle: {
-          backgroundColor: colors.zinc[900],
+          backgroundColor: colors.black,
         },
         headerTintColor: colors.white,
         tabBarActiveTintColor: colors.white,
         tabBarStyle: {
-          backgroundColor: colors.zinc[900],
+          backgroundColor: colors.black,
         },
         headerRight: () => (
           <TouchableOpacity onPress={() => supabase.auth.signOut()} className="mr-5">

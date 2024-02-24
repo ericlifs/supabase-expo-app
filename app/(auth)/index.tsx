@@ -29,10 +29,18 @@ const Index = () => {
   };
 
   return (
-    <View className="flex-1">
-      <TextInput value={todo} onChangeText={setTodo} />
+    <View className="flex-1 bg-zinc-900 p-5">
+      <View className="w-full flex flex-row">
+        <TextInput value={todo} onChangeText={setTodo} className="w-auto flex-1 mr-4" />
 
-      <Button onPress={onAddTodo} text="Add todo" disabled={!todo || isLoading} />
+        <Button
+          onPress={onAddTodo}
+          text="Add"
+          disabled={!todo || isLoading}
+          loading={isLoading}
+          className="w-auto"
+        />
+      </View>
     </View>
   );
 };
